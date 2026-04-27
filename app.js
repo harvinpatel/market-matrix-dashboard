@@ -149,7 +149,7 @@ function switchTab(element, tabName) {
     // Show the target view
     const targetView = document.getElementById(`view-${tabName}`);
     if (targetView) {
-      if (tabName === 'Dashboard' || tabName === 'Performance' || tabName === 'Finance' || tabName === 'Geo' || tabName === 'Campaigns') {
+      if (tabName === 'Dashboard' || tabName === 'Performance' || tabName === 'Finance' || tabName === 'Geo' || tabName === 'Campaigns' || tabName === 'DailyBrief') {
         targetView.style.display = 'grid';
       } else {
         targetView.style.display = 'block';

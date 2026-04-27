@@ -22,6 +22,7 @@
       </div>
       <ul class="nav-links">
         <li class="active"><a href="#" onclick="switchTab(this, 'Dashboard')"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="#" onclick="triggerAgentAction(this, 'Show my Daily Brief', 'DailyBrief')"><i data-lucide="coffee"></i> Daily Brief</a></li>
         <li><a href="#" onclick="triggerAgentAction(this, 'Show me all Campaigns', 'Campaigns')"><i data-lucide="target"></i> Campaigns</a></li>
         <li><a href="#" onclick="triggerAgentAction(this, 'Generate Performance Report', 'Performance')"><i data-lucide="bar-chart-2"></i> Performance</a></li>
         <li><a href="#" onclick="triggerAgentAction(this, 'Geographical Analysis', 'Geo')"><i data-lucide="globe"></i> Geo Analysis</a></li>
@@ -138,6 +139,68 @@
               <li><i data-lucide="globe"></i> <strong>Deep Analysis:</strong> Provide geographical, financial, and cross-channel performance breakdowns.</li>
             </ul>
           </div>
+        </div>
+      </div>
+
+      <!-- Daily Brief View -->
+      <div class="tab-view dashboard-grid" id="view-DailyBrief" style="display: none;">
+        <div class="glass-card span-2">
+          <div class="card-header">
+            <h2><i data-lucide="coffee"></i> Good Morning, Lindsey!</h2>
+          </div>
+          <div class="ai-generated-report" style="margin-top: 20px;">
+            <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+              Here is your automated daily executive brief for <strong>Tuesday, March 24th</strong>.
+            </p>
+            
+            <h3 style="color: var(--success); margin-bottom: 8px;"><i data-lucide="check-circle" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;"></i> On Track</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">
+              The <strong>Executive Education Awareness</strong> (MC-002) campaign is performing exceptionally well. Impressions are up 12% WoW and the CPM is holding steady at $16.40.
+            </p>
+
+            <h3 style="color: var(--warning); margin-bottom: 8px;"><i data-lucide="alert-circle" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;"></i> Needs Attention</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">
+              <strong>Alumni Event Registration</strong> (MC-003) CPA has spiked to $61.77. We need 40 more registrations by Friday to hit the break-even target. AI recommends narrowing the Facebook lookalike audience.
+            </p>
+            
+            <h3 style="color: var(--danger); margin-bottom: 8px;"><i data-lucide="alert-triangle" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;"></i> Critical Risk</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">
+              <strong>Undergrad Open House</strong> (MC-006) launches in 48 hours but is missing 3 final video assets from Northstar Media. Suggest escalating immediately.
+            </p>
+            
+            <button class="btn btn-primary" onclick="triggerAgentAction(this, 'Raise a concern about MC-006 missing assets to Northstar Media', 'Dashboard')">
+              <i data-lucide="send"></i> Draft Escalation Email
+            </button>
+          </div>
+        </div>
+        
+        <div class="glass-card span-1">
+          <div class="card-header">
+            <h2>Today's Priority Tasks</h2>
+          </div>
+          <ul style="list-style: none; padding: 0; margin-top: 20px; display: flex; flex-direction: column; gap: 16px;">
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+               <input type="checkbox" style="margin-top: 4px;" checked>
+               <div>
+                 <strong style="color: var(--text-primary); font-size: 14px;">Review budget forecast</strong>
+                 <p style="color: var(--text-secondary); font-size: 12px;">Completed by AI Agent at 6:00 AM</p>
+               </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+               <input type="checkbox" style="margin-top: 4px;">
+               <div>
+                 <strong style="color: var(--text-primary); font-size: 14px;">Approve new ad creatives</strong>
+                 <p style="color: var(--warning); font-size: 12px;">Due by 2:00 PM today</p>
+               </div>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+               <input type="checkbox" style="margin-top: 4px;">
+               <div>
+                 <strong style="color: var(--text-primary); font-size: 14px;">Follow up on MC-006</strong>
+                 <p style="color: var(--danger); font-size: 12px;">Critical Priority</p>
+               </div>
+            </li>
+          </ul>
         </div>
       </div>
 
