@@ -705,6 +705,11 @@ body {
     grid-template-columns: 1fr !important;
     display: flex !important;
     flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .glass-card {
+    padding: 16px !important;
   }
 
   .span-2, .span-3 {
@@ -751,5 +756,57 @@ body {
   }
   .bot-card {
     grid-column: span 2;
+  }
+}
+
+/* Portrait Mobile Optimization (Phones) */
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 24px;
+  }
+  
+  .date-text {
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .kpi-value {
+    font-size: 28px;
+  }
+
+  .bot-card {
+    height: 480px;
+  }
+
+  .bot-title h2 {
+    font-size: 16px;
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+
+  .data-table th, .data-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .split-amount.owes strong {
+    font-size: 16px;
+  }
+  
+  .split-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
 }
