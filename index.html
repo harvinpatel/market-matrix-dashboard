@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Matrix Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="logo">
+        <i data-lucide="hexagon"></i>
+        <span>Market Matrix</span>
+      </div>
+      <ul class="nav-links">
+        <li class="active"><a href="#" onclick="switchTab(this, 'Dashboard')"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="#" onclick="triggerAgentAction(this, 'Show me all Campaigns', 'Campaigns')"><i data-lucide="target"></i> Campaigns</a></li>
+        <li><a href="#" onclick="triggerAgentAction(this, 'Generate Performance Report', 'Performance')"><i data-lucide="bar-chart-2"></i> Performance</a></li>
+        <li><a href="#" onclick="triggerAgentAction(this, 'Geographical Analysis', 'Geo')"><i data-lucide="globe"></i> Geo Analysis</a></li>
+        <li><a href="#" onclick="triggerAgentAction(this, 'Show Finance Report', 'Finance')"><i data-lucide="dollar-sign"></i> Finance</a></li>
+      </ul>
+      <div class="bottom-nav">
+        <a href="#" class="settings"><i data-lucide="settings"></i> Settings</a>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="top-header">
+        <div>
+          <h1 class="page-title">Campaign Overview</h1>
+          <p class="date-text" id="current-date">Week of March 23, 2026</p>
+        </div>
+        <div class="header-actions">
+          <input type="file" id="campaign-upload" accept=".md,.txt,.csv" style="display: none;">
+          <button class="btn btn-primary" onclick="document.getElementById('campaign-upload').click()">
+            <i data-lucide="upload"></i> Upload Media Plan
+          </button>
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Lindsey+Halfar&background=0D8ABC&color=fff" alt="User" />
+          </div>
+        </div>
+      </header>
+
+      <!-- AI Loading State -->
+      <div id="ai-loading" style="display: none; justify-content: center; align-items: center; height: 400px; flex-direction: column; gap: 20px;">
+        <i data-lucide="loader-2" style="width: 48px; height: 48px; color: var(--accent-primary); animation: spin 2s linear infinite;"></i>
+        <h3 style="font-family: var(--font-display); color: var(--text-primary)">Agent generating analysis...</h3>
+        <p style="color: var(--text-secondary); max-width: 300px; text-align: center;">Market Matrix AI is crunching the latest campaign data in the background.</p>
+      </div>
+
+      <!-- Dashboard View -->
+      <div class="dashboard-grid tab-view" id="view-Dashboard">
+        
+        <!-- KPI Cards -->
+        <div class="kpi-cards">
+          <div class="glass-card kpi">
+            <div class="kpi-header">
+              <h3>Live Campaigns</h3>
+              <i data-lucide="activity"></i>
+            </div>
+            <div class="kpi-value">6 <span>/ 8</span></div>
+            <div class="kpi-trend positive"><i data-lucide="trending-up"></i> 2 launching soon</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-header">
+              <h3>Weekly Spend</h3>
+              <i data-lucide="wallet"></i>
+            </div>
+            <div class="kpi-value">$29,450</div>
+            <div class="kpi-trend warning"><i data-lucide="alert-circle"></i> +4% over plan</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-header">
+              <h3>Blended CPA</h3>
+              <i data-lucide="crosshair"></i>
+            </div>
+            <div class="kpi-value">$99.99</div>
+            <div class="kpi-trend positive"><i data-lucide="arrow-down-right"></i> -8% vs last month</div>
+          </div>
+        </div>
+
+        <!-- Active Campaigns Table -->
+        <div class="glass-card span-2 table-card">
+          <div class="card-header">
+            <h2>Live Campaigns Status</h2>
+            <button class="btn btn-text">View All</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Status</th>
+                  <th>Spend / Plan</th>
+                  <th>KPI</th>
+                  <th>Risk</th>
+                </tr>
+              </thead>
+              <tbody id="campaigns-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- AI Assistant Panel Embed -->
+        <div class="glass-card bot-card span-1">
+          <div class="bot-header">
+            <div class="bot-title">
+              <div class="status-dot"></div>
+              <h2>Campaign Manager AI</h2>
+            </div>
+            <p>Your intelligent marketing command center</p>
+          </div>
+          <div class="bot-container" id="webchat-container">
+            <iframe 
+              src="https://copilotstudio.microsoft.com/environments/Default-44467e6f-462c-4ea2-823f-7800de5434e3/bots/auto_agent_I3TXK/webchat?__version__=2"
+              title="Copilot Studio Agent"
+              frameborder="0">
+            </iframe>
+          </div>
+          <!-- What I Can Do Panel -->
+          <div class="what-i-can-do-panel">
+            <h3>What I Can Do</h3>
+            <ul class="capabilities-list">
+              <li><i data-lucide="file-text"></i> <strong>Ingest Media Plans:</strong> Automatically extract campaigns, tasks, and budgets from uploaded files.</li>
+              <li><i data-lucide="bar-chart-2"></i> <strong>Automate Reporting:</strong> Generate daily briefs, current performance, and monthly wrap-ups.</li>
+              <li><i data-lucide="alert-triangle"></i> <strong>Risk Monitoring:</strong> Flag underperforming campaigns and raise concerns with the team.</li>
+              <li><i data-lucide="globe"></i> <strong>Deep Analysis:</strong> Provide geographical, financial, and cross-channel performance breakdowns.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campaigns View -->
+      <div class="tab-view dashboard-grid" id="view-Campaigns" style="display: none;">
+        <div class="glass-card span-3 table-card">
+          <div class="card-header">
+            <h2><i data-lucide="list"></i> All Campaigns Registry</h2>
+            <button class="btn btn-primary" onclick="document.getElementById('campaign-upload').click()">Add Campaign</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Status</th>
+                  <th>Spend / Plan</th>
+                  <th>KPI</th>
+                  <th>Risk</th>
+                </tr>
+              </thead>
+              <tbody id="all-campaigns-tbody">
+                <!-- Populated by JS to mirror dashboard -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance View -->
+      <div class="tab-view dashboard-grid" id="view-Performance" style="display: none;">
+        <!-- KPI Row -->
+        <div class="kpi-cards span-3" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+          <div class="glass-card kpi">
+            <div class="kpi-header"><h3>Total Conversions</h3><i data-lucide="users"></i></div>
+            <div class="kpi-value">1,284</div>
+            <div class="kpi-trend positive"><i data-lucide="trending-up"></i> +16% MoM</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-header"><h3>Avg CPA</h3><i data-lucide="crosshair"></i></div>
+            <div class="kpi-value">$99.99</div>
+            <div class="kpi-trend positive"><i data-lucide="arrow-down-right"></i> -8% MoM</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-header"><h3>Ad Recall Lift</h3><i data-lucide="brain"></i></div>
+            <div class="kpi-value">22%</div>
+            <div class="kpi-trend positive"><i data-lucide="trending-up"></i> Target: 15%</div>
+          </div>
+          <div class="glass-card kpi">
+            <div class="kpi-header"><h3>On-time Assets</h3><i data-lucide="clock"></i></div>
+            <div class="kpi-value">88%</div>
+            <div class="kpi-trend warning"><i data-lucide="alert-triangle"></i> MC-006 Delayed</div>
+          </div>
+        </div>
+        
+        <!-- Chart -->
+        <div class="glass-card span-2">
+          <div class="card-header">
+            <h2><i data-lucide="trending-up"></i> Conversion & CPA Trends (Last 4 Weeks)</h2>
+          </div>
+          <div style="height: 300px; position: relative;">
+            <canvas id="performanceChart"></canvas>
+          </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="glass-card span-1">
+          <div class="card-header">
+            <h2><i data-lucide="zap"></i> AI Insights</h2>
+          </div>
+          <div class="ai-generated-report">
+            <h3 style="color: var(--success); margin-bottom: 8px;">Top Performer: MC-005</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">CPA $405 vs target $450. LinkedIn ad creative refreshed 2026-03-15 caused CTR to jump from 0.9% → 1.4%.</p>
+            
+            <h3 style="color: var(--warning); margin-bottom: 8px;">Underperformer: MC-003</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 13px;">Registrations rising too slowly. Root cause: Paid social lookalike audience is too broad.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Geo View -->
+      <div class="tab-view dashboard-grid" id="view-Geo" style="display: none;">
+        <div class="glass-card span-2">
+          <div class="card-header">
+            <h2><i data-lucide="map"></i> Global ROI Hotspots</h2>
+          </div>
+          <!-- Custom CSS Map -->
+          <div class="world-map-container">
+            <div class="map-bg"></div>
+            <!-- Hotspots -->
+            <div class="hotspot" style="top: 30%; left: 20%;" data-tooltip="North America: 120% ROI">
+              <div class="pulse warning"></div>
+            </div>
+            <div class="hotspot" style="top: 60%; left: 75%;" data-tooltip="SE Asia: 185% ROI">
+              <div class="pulse positive"></div>
+            </div>
+            <div class="hotspot" style="top: 25%; left: 50%;" data-tooltip="Europe: 95% ROI">
+              <div class="pulse danger"></div>
+            </div>
+            <div class="hotspot" style="top: 45%; left: 65%;" data-tooltip="India: 150% ROI">
+              <div class="pulse positive"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="glass-card span-1">
+          <div class="card-header">
+            <h2>Region Breakdown</h2>
+          </div>
+          <table class="data-table" style="font-size: 13px;">
+            <thead>
+              <tr><th>Region</th><th>Spend</th><th>ROI</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SE Asia</td><td>$14,500</td><td style="color: var(--success)">185%</td></tr>
+              <tr><td>India</td><td>$18,200</td><td style="color: var(--success)">150%</td></tr>
+              <tr><td>N. America</td><td>$85,000</td><td style="color: var(--warning)">120%</td></tr>
+              <tr><td>Europe</td><td>$10,720</td><td style="color: var(--danger)">95%</td></tr>
+            </tbody>
+          </table>
+          <p style="color: var(--text-secondary); font-size: 12px; margin-top: 20px;">
+            <i data-lucide="brain" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></i> 
+            <strong>AI Note:</strong> MC-009 Global Online MBA Expansion is highly efficient in SE Asia. Consider shifting $5,000 from Europe to SE Asia.
+          </p>
+        </div>
+      </div>
+
+      <!-- Finance View -->
+      <div class="tab-view dashboard-grid" id="view-Finance" style="display: none;">
+        <!-- Splitwise Style Container -->
+        <div class="glass-card span-2" style="background: var(--bg-secondary);">
+          <div class="card-header" style="border-bottom: 1px solid var(--border-glass); padding-bottom: 16px;">
+            <h2><i data-lucide="pie-chart"></i> Agency Balances (Splitwise View)</h2>
+            <div style="color: var(--text-secondary); font-size: 14px;">Total Outstanding: <strong style="color: var(--danger);">$47,700</strong></div>
+          </div>
+          
+          <div class="splitwise-list" style="margin-top: 16px;">
+            <!-- Agency 1 -->
+            <div class="split-item">
+              <div class="split-avatar" style="background: #e11d48;"><i data-lucide="star"></i></div>
+              <div class="split-details">
+                <h3>Northstar Media</h3>
+                <p>iMBA & MSBA Campaigns</p>
+              </div>
+              <div class="split-amount owes">
+                <span>You owe</span>
+                <strong>$25,000</strong>
+                <span class="due-date">Due: Apr 30</span>
+              </div>
+              <button class="btn btn-primary btn-sm settle-btn">Settle Up</button>
+            </div>
+            
+            <!-- Agency 2 -->
+            <div class="split-item">
+              <div class="split-avatar" style="background: #2563eb;"><i data-lucide="sun"></i></div>
+              <div class="split-details">
+                <h3>Brightline Agency</h3>
+                <p>ExecEd Awareness</p>
+              </div>
+              <div class="split-amount owes">
+                <span>You owe</span>
+                <strong>$14,200</strong>
+                <span class="due-date">Due: May 05</span>
+              </div>
+              <button class="btn btn-primary btn-sm settle-btn">Settle Up</button>
+            </div>
+
+            <!-- Agency 3 -->
+            <div class="split-item">
+              <div class="split-avatar" style="background: #16a34a;"><i data-lucide="zap"></i></div>
+              <div class="split-details">
+                <h3>Pivot Digital</h3>
+                <p>Event Registrations</p>
+              </div>
+              <div class="split-amount owes">
+                <span>You owe</span>
+                <strong>$8,500</strong>
+                <span class="due-date">Due: May 12</span>
+              </div>
+              <button class="btn btn-primary btn-sm settle-btn">Settle Up</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget Forecast -->
+        <div class="glass-card span-1">
+          <div class="card-header">
+            <h2>Budget Forecast</h2>
+          </div>
+          <div style="margin-top: 20px;">
+            <p style="color: var(--text-secondary); font-size: 14px;">MTD Spend</p>
+            <h3 style="font-size: 32px; font-family: var(--font-display); color: var(--text-primary);">$128,420</h3>
+            
+            <div style="width: 100%; background: var(--bg-glass); height: 8px; border-radius: 4px; margin: 16px 0;">
+              <div style="width: 83%; background: var(--accent-primary); height: 100%; border-radius: 4px;"></div>
+            </div>
+            
+            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">Projected EoM</p>
+            <h3 style="font-size: 32px; font-family: var(--font-display); color: var(--text-primary);">$154,200</h3>
+            <span style="color: var(--warning); font-size: 12px;"><i data-lucide="alert-circle" style="width:12px;height:12px;"></i> Will exceed $150k target</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
