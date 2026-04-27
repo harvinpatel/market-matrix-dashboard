@@ -587,7 +587,10 @@ body {
   background: var(--text-secondary);
 }
 
-/* Mobile Responsiveness */
+.mobile-menu-btn {
+  display: none;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 900px) {
   .app-container {
@@ -605,35 +608,56 @@ body {
     gap: 16px;
   }
 
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .mobile-menu-btn:hover {
+    background: var(--bg-glass);
+  }
+
   .logo {
     padding: 0;
     margin-bottom: 0;
   }
 
   .nav-links {
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 0 4px 8px 4px;
-    margin: 0;
+    display: none; /* Hidden by default */
+    flex-direction: column;
     width: 100%;
-    /* Hide scrollbar for a cleaner look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    margin: 0;
+    padding: 10px 0 0 0;
+    gap: 12px;
   }
-  .nav-links::-webkit-scrollbar {
-    display: none;
+
+  .nav-links.open {
+    display: flex;
   }
 
   .nav-links li a {
-    white-space: nowrap;
-    padding: 8px 12px;
-    font-size: 14px;
+    white-space: normal;
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 8px;
   }
 
   .nav-links li.active a {
     background: var(--bg-glass);
-    border-left: none;
-    border-bottom: 3px solid var(--accent-primary);
+    border-left: 3px solid var(--accent-primary);
+    border-bottom: none;
   }
 
   .bottom-nav {

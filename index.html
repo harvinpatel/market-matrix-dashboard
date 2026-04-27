@@ -16,11 +16,16 @@
     
     <!-- Sidebar Navigation -->
     <nav class="sidebar">
-      <div class="logo">
-        <i data-lucide="hexagon"></i>
-        <span>Market Matrix</span>
+      <div class="sidebar-header">
+        <div class="logo">
+          <i data-lucide="hexagon"></i>
+          <span>Market Matrix</span>
+        </div>
+        <button class="mobile-menu-btn" onclick="toggleDrawer()">
+          <i data-lucide="menu"></i>
+        </button>
       </div>
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-drawer">
         <li class="active"><a href="#" onclick="switchTab(this, 'Dashboard')"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
         <li><a href="#" onclick="triggerAgentAction(this, 'Show my Daily Brief', 'DailyBrief')"><i data-lucide="coffee"></i> Daily Brief</a></li>
         <li><a href="#" onclick="triggerAgentAction(this, 'Show me all Campaigns', 'Campaigns')"><i data-lucide="target"></i> Campaigns</a></li>

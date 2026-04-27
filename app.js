@@ -130,6 +130,10 @@ function updateKPIs() {
 
 // Sidebar Navigation Handling
 function switchTab(element, tabName) {
+  // Close mobile drawer if open
+  const drawer = document.getElementById('nav-drawer');
+  if (drawer) drawer.classList.remove('open');
+
   // Remove active class from all links
   document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
   // Add active class to clicked link
@@ -249,7 +253,7 @@ function showToast(message) {
     Object.assign(toast.style, {
       position: 'fixed',
       bottom: '24px',
-      right: '400px', // Just to the left of the bot
+      right: '24px', // Adjusted to work universally
       background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
       color: 'white',
       padding: '16px 20px',
@@ -261,7 +265,8 @@ function showToast(message) {
       zIndex: '1000',
       opacity: '0',
       transform: 'translateY(20px)',
-      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+      maxWidth: 'calc(100vw - 48px)'
     });
     document.body.appendChild(toast);
   }
@@ -358,8 +363,54 @@ document.getElementById('campaign-upload').addEventListener('change', function(e
   }
 });
 
-// Initialize
+// ==========================================
+// BACKEND INTEGRATION (POWER AUTOMATE / API)
+// ==========================================
+
+// Replace this URL with your Power Automate "When an HTTP request is received" URL
+const API_ENDPOINT = 'YOUR_POWER_AUTOMATE_HTTP_URL_HERE'; 
+
+async function fetchCampaignData() {
+  try {
+    // Show loading state in the table
+    const tbody1 = document.getElementById('campaigns-tbody');
+    if (tbody1) {
+      tbody1.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px; color: var(--text-secondary);"><i data-lucide="loader-2" style="animation: spin 2s linear infinite; margin-bottom: 10px;"></i><br>Fetching live data from backend...</td></tr>';
+      lucide.createIcons();
+    }
+
+    // Skip fetch if the URL hasn't been configured yet
+    if (API_ENDPOINT === 'YOUR_POWER_AUTOMATE_HTTP_URL_HERE') {
+      throw new Error("API Endpoint not configured. Falling back to local mock data.");
+    }
+
+    const response = await fetch(API_ENDPOINT);
+    if (!response.ok) throw new Error('Network response was not ok');
+    
+    const liveData = await response.json();
+    
+    // Replace the local mock array with the live data from the database
+    campaigns.length = 0; 
+    campaigns.push(...liveData);
+    
+    console.log("Successfully loaded live data from Power Automate!");
+  } catch (error) {
+    console.warn("Backend not connected. Using local mock data for the demo. Reason:", error.message);
+    // The 'campaigns' array retains its initial local mock data as a fallback
+  } finally {
+    // Render the UI whether we used live data or mock data
+    renderTable();
+    updateKPIs();
+    lucide.createIcons();
+  }
+}
+
+function toggleDrawer() {
+  const drawer = document.getElementById('nav-drawer');
+  if (drawer) drawer.classList.toggle('open');
+}
+
+// Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
-  renderTable();
-  updateKPIs();
+  fetchCampaignData();
 });
